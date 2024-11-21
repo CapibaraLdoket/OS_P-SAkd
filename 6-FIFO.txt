@@ -1,0 +1,55 @@
+#include <stdio.h>
+#define MAX 3
+typedef struct queue {
+int irear, ifront;
+int aiframe[MAX];
+} queue;
+void fnFIFO(int[], int);
+int main() {
+int size;
+printf("******* Page Replacement Algorithms *******\n");
+printf("Enter the size: \n");
+scanf("%d", &size);
+int arr[size];
+printf("Enter the elements: ");
+for (int i = 0; i < size; i++)
+scanf("%d", &arr[i]);
+fnFIFO(arr, size);
+}
+void fnFIFO(int arr[], int size) {
+int pg=0;
+queue q;
+q.irear = 0;
+q.ifront = -1;
+for (int i = 0; i < MAX; i++)
+q.aiframe[i] = -1;
+for (int i = 0; i < size; i++) {
+int flag = 0;
+for (int j = 0; j < MAX; j++) {
+if (q.aiframe[j] == arr[i]) {
+flag = 1;
+break;
+}
+}
+if (flag == 0) {
+q.aiframe[q.irear] = arr[i];
+pg++;
+q.irear = (q.irear + 1) % MAX;
+if (q.irear == 0)
+q.ifront++;
+if (q.ifront == MAX)
+q.ifront = 0;
+}
+printf("Frame: ");
+for (int j = 0; j < MAX; j++) {
+if (q.aiframe[j] != -1)
+printf("%d ", q.aiframe[j]);
+else
+printf("- ");
+}
+printf("\n");
+}
+printf("Total Number of Page faults : %d\n",pg);
+printf("Page Fault Frequency : %f\n",(float)pg/size*100);
+printf("Heap Frequecy : %f\n",100-(float)pg/size*100);
+}
